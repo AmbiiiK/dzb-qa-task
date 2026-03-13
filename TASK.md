@@ -29,7 +29,7 @@ Ve spolupráci s AI vytvoř automatizované testy pro náš produkt.
 Stránka `/voucher` slouží k nákupu voucheru.
 Platební metody se liší dle varianty — viz `tests/lib/paymentMethods.ts`.
 
-**Happy path** — pokryj úspěšný nákup pro každou dostupnou platební metodu dané varianty:
+**Happy path** — pokryj úspěšný nákup (ale ne samotnou platbu) pro každou dostupnou platební metodu dané varianty:
 
 - CZ: Benefitní karta Edenred, Edenred Benefity Premium (Cafeterie), Benefitní karta Pluxee, Benefitní karta UP, Platební karta, Převodem z účtu
 - Whitelabel: Benefitní karta Pluxee, Platební karta, Převodem z účtu
