@@ -1,9 +1,10 @@
-export const ROUTES = {
+export const routes = {
   cz: {
     homepage: '/',
     order: '/objednavka',
     accommodation: '/ubytovani',
     reservation: '/rezervace',
+    voucher: '/voucher',
     status: '/status',
   },
   pl: {
@@ -11,6 +12,7 @@ export const ROUTES = {
     order: '/zamowienie',
     accommodation: '/nocleg',
     reservation: '/rezerwacja',
+    voucher: '/voucher',
     status: '/status',
   },
   whitelabel: {
@@ -18,8 +20,9 @@ export const ROUTES = {
     order: '/objednavka',
     accommodation: '/ubytovani',
     reservation: '/rezervace',
+    voucher: '/voucher',
     status: '/status',
   },
 } as const;
 
-export type ProjectName = keyof typeof ROUTES; // Extract valid project names
+export type ProjectName = keyof typeof routes;
