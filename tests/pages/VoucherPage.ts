@@ -59,13 +59,11 @@ export class VoucherPage {
     const radio = this.page.getByRole('radio', { name: voucherLabels[value] });
     const inputId = await radio.getAttribute('id');
     await expect(async () => {
-      await this.page.evaluate(
-        (id) => (document.querySelector(`label[for="${id}"]`) as HTMLElement)?.click(),
-        inputId
-      );
+      if (!inputId) throw new Error(`Radio for "${value}" has no id attribute`);
+      await this.page.locator(`label[for="${inputId}"]`).click();
       await expect(this.page.getByText('Servisní poplatek')).toBeVisible({ timeout: 2_000 });
+      await expect(radio).toBeChecked();
     }).toPass({ timeout: 15_000 });
-    await expect(radio).toBeChecked();
   }
 
   async enableGiftMode() {
