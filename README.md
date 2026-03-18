@@ -87,11 +87,11 @@ Testy jsou postaveny na **Page Object Model (POM)** — každá stránka má vla
 
 ## Využití AI
 
-Do práce jsem se pustil bez předchozího promyšlení celkového workflow, což vedlo k tomu, že jsem zbytečně moc času strávil opakovaným přepisováním dvou agentů — příště se vyplatí nejdřív se zastavit a ucelený plán si rozmyslet.
+Do práce jsem se pustil bez předchozího promyšlení celkového workflow, což vedlo k tomu, že jsem zbytečně mnoho času strávil opakovaným přepisováním dvou agentů — příště se vyplatí nejdříve se zastavit a ucelený plán si rozmyslet.
 
 Vytvořil jsem dva AI agenty — `qa-playwright.md` pro průzkum webu a psaní testů dle definovaných pravidel (best practices, anti-patterny) a `qa-reviewer` pro následnou revizi repo a navrhování změn ke schválení.
 
-Paralelně jsem využíval Claude i ChatGPT — Claude jsem používal od začátku prostřednictvím Claude Code s playwright skills a dalšími „superpowers" jako je brainstorming a psaní kódu, zatímco ChatGPT sloužil spíš jako doplňkový diskuzní partner.
+Paralelně jsem využíval Claude i ChatGPT — Claude jsem používal od začátku prostřednictvím Claude Code s playwright skills a dalšími „superpowers" jako je brainstorming a psaní kódu, zatímco ChatGPT sloužil spíše jako doplňkový diskusní partner.
 
 Chyběly mi jednoznačné lokátory typu `data-testid`, na které jsem byl zvyklý z předchozích projektů jako best practice — byť díky AI nástrojům už dnes jejich absence pravděpodobně nepředstavuje tak velký problém při údržbě testů.
 
@@ -99,9 +99,9 @@ Z časových důvodů nebyla vytvořena polská (PL) verze testů.
 
 ## Reflexe
 
-S více časem bych se zaměřil na tyto věci:
+Kdybych měl více času, zaměřil bych se na tyto věci:
 
-- **DOM elementy** — nepodařilo se mi najít lepší selektor než `.payment-form__content`, což je pragmatické řešení. S více časem bych sám vytvořil, nebo požádal někoho z FE týmu, aby přidal `data-testid` či jiný vhodnější selektor.
+- **DOM elementy** — nepodařilo se mi najít lepší selektor než `.payment-form__content`, což je pragmatické řešení. Kdybych měl více času, sám bych vytvořil, nebo požádal někoho z FE týmu, aby přidal `data-testid` či jiný vhodnější selektor.
 - **`OrderStatusPage`** — je v ní napevno zakódovaná routa. Funguje to díky shodné cestě, ale jde to proti architektuře projektu — správně by měla přijímat `ProjectName` stejně jako `VoucherPage`.
 - **Ceny podle hodnoty voucheru** — `paymentMethods` obsahuje pouze ceny pro 1 000 Kč. Rozšíření o další mapování by umožnilo testy i pro 3 000 a 5 000 Kč.
-- **PL varianta** — konfigurace je připravena, avšak nestihl jsem napsat testy. S více časem bych průzkumem DOMu ověřil rozdíly a testy doplnil.
+- **PL varianta** — konfigurace je připravena, avšak nestihl jsem napsat testy. Kdybych měl více času, průzkumem DOMu bych ověřil rozdíly a testy doplnil.
