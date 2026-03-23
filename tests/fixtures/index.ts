@@ -2,6 +2,7 @@ import { test as base } from '@playwright/test';
 import { OrderInfo, GiftInfo, VoucherPage } from '../pages/VoucherPage';
 import { routes } from '../lib/routes';
 import type { ProjectName } from '../lib/routes';
+import type { PaymentMethodType } from '../lib/paymentMethods';
 
 const PROJECT_NAMES = Object.keys(routes) as ProjectName[];
 
@@ -13,13 +14,25 @@ function toProjectName(name: string): ProjectName {
   return name as ProjectName;
 }
 
+export type ProjectValidationErrors = {
+  missingFieldErrors: string[];
+  uncheckedTermsErrors: string[];
+};
+
 type TestFixtures = {
   testOrder: OrderInfo;
   testGift: GiftInfo;
   voucherPage: VoucherPage;
 };
 
-export const test = base.extend<TestFixtures>({
+export type ProjectOptions = {
+  projectPaymentMethods: PaymentMethodType[];
+  projectValidationErrors: ProjectValidationErrors;
+};
+
+export const test = base.extend<TestFixtures & ProjectOptions>({
+  projectPaymentMethods: [[], { option: true }],
+  projectValidationErrors: [{ missingFieldErrors: [], uncheckedTermsErrors: [] }, { option: true }],
   testOrder: async ({}, use) => {
     await use({
       firstName: 'Jan',

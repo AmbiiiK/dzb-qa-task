@@ -1,6 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
+import type { ProjectOptions } from './tests/fixtures';
 
-export default defineConfig({
+export default defineConfig<ProjectOptions>({
   testDir: './tests',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
@@ -23,30 +24,44 @@ export default defineConfig({
   projects: [
     {
       name: 'cz',
-      // Only run files matching *.cz.spec.ts — any new CZ test file is automatically picked up
-      testMatch: /.*\.cz\.spec\.ts/,
       use: {
         ...devices['Desktop Chrome'],
         baseURL: 'https://wa-fe-dzb-cz-preview-qa-test.azurewebsites.net',
+        projectPaymentMethods: [
+          'edenred-benefit-card',
+          'edenred-cafeteria',
+          'up-benefit-card',
+          'pluxee-benefit-card',
+          'payment-card',
+          'bank-transfer',
+        ],
+        projectValidationErrors: {
+          missingFieldErrors: ['zadejte prosím', 'V objednávkovém formuláři se vyskytují chyby.'],
+          uncheckedTermsErrors: ['povinné pole', 'V objednávkovém formuláři se vyskytují chyby.'],
+        },
       },
     },
     {
       name: 'pl',
-      // Only run files matching *.pl.spec.ts — placeholder for future PL tests
-      testMatch: /.*\.pl\.spec\.ts/,
       use: {
         ...devices['Desktop Chrome'],
         baseURL: 'https://wa-fe-dzb-pl-preview-qa-test.azurewebsites.net',
         locale: 'pl-PL',
+        // PL not yet implemented — add payment methods and validation errors here to enable tests
+        projectPaymentMethods: [],
+        projectValidationErrors: { missingFieldErrors: [], uncheckedTermsErrors: [] },
       },
     },
     {
       name: 'whitelabel',
-      // Only run files matching *.whitelabel.spec.ts
-      testMatch: /.*\.whitelabel\.spec\.ts/,
       use: {
         ...devices['Desktop Chrome'],
         baseURL: 'https://wa-fe-dzb-pluxee-cz-preview-qa-test.azurewebsites.net',
+        projectPaymentMethods: ['pluxee-benefit-card', 'payment-card', 'bank-transfer'],
+        projectValidationErrors: {
+          missingFieldErrors: ['Povinné pole'],
+          uncheckedTermsErrors: ['Povinné pole'],
+        },
       },
     },
   ],
