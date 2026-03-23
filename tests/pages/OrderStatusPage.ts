@@ -1,12 +1,15 @@
 import { Page, expect } from '@playwright/test';
 import { PaymentMethodType, paymentMethods } from '../lib/paymentMethods';
-import { routes } from '../lib/routes';
+import { routes, ProjectName } from '../lib/routes';
 
 export class OrderStatusPage {
-  constructor(private readonly page: Page) {}
+  constructor(
+    private readonly page: Page,
+    private readonly project: ProjectName
+  ) {}
 
   async expectSuccess() {
-    await expect(this.page).toHaveURL(new RegExp(routes.cz.status));
+    await expect(this.page).toHaveURL(new RegExp(routes[this.project].status));
     await expect(
       this.page.getByRole('heading', { name: 'Objednávka úspěšně odeslána, děkujeme!' })
     ).toBeVisible();
