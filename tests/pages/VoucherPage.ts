@@ -35,7 +35,7 @@ export interface GiftInfo {
 export class VoucherPage {
   constructor(
     readonly page: Page,
-    private readonly project: ProjectName
+    readonly project: ProjectName
   ) {}
 
   async goto() {

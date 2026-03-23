@@ -18,7 +18,7 @@ export interface PurchaseOptions {
  */
 export async function purchaseVoucher(voucherPage: VoucherPage, options: PurchaseOptions) {
   const { method, voucherValue, order, asGift, gift } = options;
-  const statusPage = new OrderStatusPage(voucherPage.page);
+  const statusPage = new OrderStatusPage(voucherPage.page, voucherPage.project);
 
   await voucherPage.goto();
   await voucherPage.selectVoucherValue(voucherValue);
