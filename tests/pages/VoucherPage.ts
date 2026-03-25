@@ -1,6 +1,7 @@
 import { Page, expect } from '@playwright/test';
 import { PaymentMethodType, paymentMethods } from '../lib/paymentMethods';
 import { routes, ProjectName } from '../lib/routes';
+import { strings } from '../lib/strings';
 
 export type VoucherValue = '1000' | '3000' | '5000';
 
@@ -39,14 +40,15 @@ export class VoucherPage {
   ) {}
 
   async goto() {
+    const s = strings[this.project];
     await this.page.goto(routes[this.project].voucher);
-    await expect(this.page.getByRole('heading', { name: 'Objednávka poukazu' })).toBeVisible();
+    await expect(this.page.getByRole('heading', { name: s.voucherHeading })).toBeVisible();
 
     const czDropdownButton = this.page
       .locator('.payment-form__content')
       .getByRole('button')
       .first();
-    const wlDropdownSelect = this.page.getByRole('combobox', { name: /Způsob platby/ });
+    const wlDropdownSelect = this.page.getByRole('combobox', { name: s.paymentMethodSelect });
 
     await expect(async () => {
       const isCzReady = await czDropdownButton.isVisible().catch(() => false);
@@ -56,55 +58,57 @@ export class VoucherPage {
   }
 
   async selectVoucherValue(value: VoucherValue) {
+    const s = strings[this.project];
     const radio = this.page.getByRole('radio', { name: voucherLabels[value] });
     const inputId = await radio.getAttribute('id');
     await expect(async () => {
       if (!inputId) throw new Error(`Radio for "${value}" has no id attribute`);
       await this.page.locator(`label[for="${inputId}"]`).click();
-      await expect(this.page.getByText('Servisní poplatek')).toBeVisible({ timeout: 2_000 });
+      await expect(this.page.getByText(s.serviceFee)).toBeVisible({ timeout: 2_000 });
       await expect(radio).toBeChecked();
     }).toPass({ timeout: 15_000 });
   }
 
   async enableGiftMode() {
-    await this.page.getByRole('checkbox', { name: /Kupuji jako dárek/ }).check();
-    await expect(this.page.getByRole('textbox', { name: /Jméno obdarovaného/ })).toBeVisible();
-    await expect(this.page.getByRole('textbox', { name: /Vzkaz/ })).toBeVisible();
+    const s = strings[this.project];
+    await this.page.getByRole('checkbox', { name: s.giftModeCheckbox }).check();
+    await expect(this.page.getByRole('textbox', { name: s.recipientNameField })).toBeVisible();
+    await expect(this.page.getByRole('textbox', { name: s.messageField })).toBeVisible();
   }
 
   async fillGiftInfo(gift: GiftInfo) {
-    await this.page.getByRole('textbox', { name: /Jméno obdarovaného/ }).fill(gift.recipientName);
-    await this.page.getByRole('textbox', { name: /Vzkaz/ }).fill(gift.message);
+    const s = strings[this.project];
+    await this.page.getByRole('textbox', { name: s.recipientNameField }).fill(gift.recipientName);
+    await this.page.getByRole('textbox', { name: s.messageField }).fill(gift.message);
   }
 
   async fillOrderInfo(info: Partial<OrderInfo>) {
+    const s = strings[this.project];
     if (info.firstName !== undefined)
-      await this.page
-        .getByRole('textbox', { name: /^Jméno/ })
-        .last()
-        .fill(info.firstName);
+      await this.page.getByRole('textbox', { name: s.firstNameField }).last().fill(info.firstName);
     if (info.lastName !== undefined)
-      await this.page.getByRole('textbox', { name: /Příjmení/ }).fill(info.lastName);
+      await this.page.getByRole('textbox', { name: s.lastNameField }).fill(info.lastName);
     if (info.email !== undefined)
-      await this.page.getByRole('textbox', { name: /Emailová adresa/ }).fill(info.email);
+      await this.page.getByRole('textbox', { name: s.emailField }).fill(info.email);
     if (info.phone !== undefined)
-      await this.page.getByRole('textbox', { name: /Telefonní číslo/ }).fill(info.phone);
+      await this.page.getByRole('textbox', { name: s.phoneField }).fill(info.phone);
     if (info.street !== undefined)
-      await this.page.getByRole('textbox', { name: /Ulice/ }).fill(info.street);
+      await this.page.getByRole('textbox', { name: s.streetField }).fill(info.street);
     if (info.houseNumber !== undefined)
-      await this.page.getByRole('textbox', { name: /Číslo popisné/ }).fill(info.houseNumber);
+      await this.page.getByRole('textbox', { name: s.houseNumberField }).fill(info.houseNumber);
     if (info.zip !== undefined)
-      await this.page.getByRole('textbox', { name: /PSČ/ }).fill(info.zip);
+      await this.page.getByRole('textbox', { name: s.zipField }).fill(info.zip);
     if (info.city !== undefined)
-      await this.page.getByRole('textbox', { name: /Město/ }).fill(info.city);
+      await this.page.getByRole('textbox', { name: s.cityField }).fill(info.city);
   }
 
   async selectPaymentMethod(method: PaymentMethodType) {
+    const s = strings[this.project];
     const methodDef = paymentMethods[method];
     if (!methodDef) throw new Error(`Unknown payment method: ${method}`);
 
     if (this.project === 'whitelabel') {
-      const select = this.page.getByRole('combobox', { name: /Způsob platby/ });
+      const select = this.page.getByRole('combobox', { name: s.paymentMethodSelect });
       await select.selectOption({ label: methodDef.name });
       await expect(select.locator('option:checked')).toHaveText(methodDef.name);
     } else {
@@ -120,18 +124,21 @@ export class VoucherPage {
   }
 
   async acceptTerms() {
-    await this.page.getByRole('checkbox', { name: /storno podmínkami/ }).check();
-    await this.page.getByRole('checkbox', { name: /obchodními podmínkami/ }).check();
+    const s = strings[this.project];
+    await this.page.getByRole('checkbox', { name: s.termsCancellation }).check();
+    await this.page.getByRole('checkbox', { name: s.termsConditions }).check();
   }
 
   async expectRecap(value: VoucherValue): Promise<void> {
-    await expect(this.page.getByText('Servisní poplatek')).toBeVisible();
+    const s = strings[this.project];
+    await expect(this.page.getByText(s.serviceFee)).toBeVisible();
     const voucherText = voucherPrices[value].voucher;
     const voucherPattern = new RegExp(voucherText.replace(/[\s\u00A0]/g, '[\\s\\u00A0]'));
     await expect(this.page.getByText(voucherPattern).first()).toBeVisible();
   }
 
   async submit() {
-    await this.page.getByRole('button', { name: /^Objednat/ }).click();
+    const s = strings[this.project];
+    await this.page.getByRole('button', { name: s.submitButton }).click();
   }
 }
