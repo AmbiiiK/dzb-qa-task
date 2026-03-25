@@ -85,10 +85,7 @@ export class VoucherPage {
   async fillOrderInfo(info: Partial<OrderInfo>) {
     const s = strings[this.project];
     if (info.firstName !== undefined)
-      await this.page
-        .getByRole('textbox', { name: s.firstNameField })
-        .last()
-        .fill(info.firstName);
+      await this.page.getByRole('textbox', { name: s.firstNameField }).last().fill(info.firstName);
     if (info.lastName !== undefined)
       await this.page.getByRole('textbox', { name: s.lastNameField }).fill(info.lastName);
     if (info.email !== undefined)
@@ -127,8 +124,9 @@ export class VoucherPage {
   }
 
   async acceptTerms() {
-    await this.page.getByRole('checkbox', { name: /storno podmínkami/ }).check();
-    await this.page.getByRole('checkbox', { name: /obchodními podmínkami/ }).check();
+    const s = strings[this.project];
+    await this.page.getByRole('checkbox', { name: s.termsCancellation }).check();
+    await this.page.getByRole('checkbox', { name: s.termsConditions }).check();
   }
 
   async expectRecap(value: VoucherValue): Promise<void> {

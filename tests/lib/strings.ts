@@ -16,6 +16,8 @@ export type ProjectStrings = {
   cityField: RegExp;
   paymentMethodSelect: RegExp;
   submitButton: RegExp;
+  termsCancellation: RegExp;
+  termsConditions: RegExp;
   orderSuccessHeading: string;
   paymentPending: string;
   payButton: string;
@@ -37,6 +39,8 @@ const czStrings: ProjectStrings = {
   cityField: /Město/,
   paymentMethodSelect: /Způsob platby/,
   submitButton: /^Objednat/,
+  termsCancellation: /storno podmínkami/,
+  termsConditions: /obchodními podmínkami/,
   orderSuccessHeading: 'Objednávka úspěšně odeslána, děkujeme!',
   paymentPending: 'Čeká na platbu',
   payButton: 'Zaplatit',
