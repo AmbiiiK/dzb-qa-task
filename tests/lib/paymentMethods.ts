@@ -76,4 +76,4 @@ export const projectPaymentMethods = {
   cz: getPaymentMethodsForProject('cz'),
   pl: getPaymentMethodsForProject('pl'),
   whitelabel: getPaymentMethodsForProject('whitelabel'),
-} as const;
+};

@@ -1,5 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 import type { ProjectOptions } from './tests/fixtures';
+import { projectPaymentMethods } from './tests/lib/paymentMethods';
 
 export default defineConfig<ProjectOptions>({
   testDir: './tests',
@@ -27,14 +28,7 @@ export default defineConfig<ProjectOptions>({
       use: {
         ...devices['Desktop Chrome'],
         baseURL: 'https://wa-fe-dzb-cz-preview-qa-test.azurewebsites.net',
-        projectPaymentMethods: [
-          'edenred-benefit-card',
-          'edenred-cafeteria',
-          'up-benefit-card',
-          'pluxee-benefit-card',
-          'payment-card',
-          'bank-transfer',
-        ],
+        projectPaymentMethods: projectPaymentMethods.cz,
         projectValidationErrors: {
           missingFieldErrors: ['zadejte prosím', 'V objednávkovém formuláři se vyskytují chyby.'],
           uncheckedTermsErrors: ['povinné pole', 'V objednávkovém formuláři se vyskytují chyby.'],
@@ -48,7 +42,7 @@ export default defineConfig<ProjectOptions>({
         baseURL: 'https://wa-fe-dzb-pl-preview-qa-test.azurewebsites.net',
         locale: 'pl-PL',
         // PL not yet implemented — add payment methods and validation errors here to enable tests
-        projectPaymentMethods: [],
+        projectPaymentMethods: projectPaymentMethods.pl,
         projectValidationErrors: { missingFieldErrors: [], uncheckedTermsErrors: [] },
       },
     },
@@ -57,7 +51,7 @@ export default defineConfig<ProjectOptions>({
       use: {
         ...devices['Desktop Chrome'],
         baseURL: 'https://wa-fe-dzb-pluxee-cz-preview-qa-test.azurewebsites.net',
-        projectPaymentMethods: ['pluxee-benefit-card', 'payment-card', 'bank-transfer'],
+        projectPaymentMethods: projectPaymentMethods.whitelabel,
         projectValidationErrors: {
           missingFieldErrors: ['Povinné pole'],
           uncheckedTermsErrors: ['Povinné pole'],
