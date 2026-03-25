@@ -1,6 +1,7 @@
 import { Page, expect } from '@playwright/test';
 import { PaymentMethodType, paymentMethods } from '../lib/paymentMethods';
 import { routes, ProjectName } from '../lib/routes';
+import { strings } from '../lib/strings';
 
 export class OrderStatusPage {
   constructor(
@@ -9,10 +10,9 @@ export class OrderStatusPage {
   ) {}
 
   async expectSuccess() {
+    const s = strings[this.project];
     await expect(this.page).toHaveURL(new RegExp(routes[this.project].status));
-    await expect(
-      this.page.getByRole('heading', { name: 'Objednávka úspěšně odeslána, děkujeme!' })
-    ).toBeVisible();
+    await expect(this.page.getByRole('heading', { name: s.orderSuccessHeading })).toBeVisible();
   }
 
   async expectOrderNumber() {
@@ -32,12 +32,14 @@ export class OrderStatusPage {
       this.page.getByRole('definition').filter({ hasText: pricePattern }).first()
     ).toBeVisible();
 
+    const s = strings[this.project];
     await expect(
-      this.page.getByRole('definition').filter({ hasText: 'Čeká na platbu' })
+      this.page.getByRole('definition').filter({ hasText: s.paymentPending })
     ).toBeVisible();
   }
 
   async expectPaymentLink() {
-    await expect(this.page.getByRole('link', { name: 'Zaplatit' })).toBeVisible();
+    const s = strings[this.project];
+    await expect(this.page.getByRole('link', { name: s.payButton })).toBeVisible();
   }
 }
